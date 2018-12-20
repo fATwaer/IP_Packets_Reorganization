@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1545225160 source:/home/moonlight/tcpPro/FreeBSDPacketsReorganization/inc/llInsert.c
+	<stdio.h>
+	"../lib/linklist.h"
+
+1545229051 source:/home/moonlight/tcpPro/FreeBSDPacketsReorganization/main.c
+	<stdio.h>
+	<stdlib.h>
+	"inc/ip_queue.h"
+
+1545223621 source:/home/moonlight/tcpPro/FreeBSDPacketsReorganization/inc/linklist.c
+	"../lib/linklist.h"
+
+1545225151 /home/moonlight/tcpPro/FreeBSDPacketsReorganization/lib/linklist.h
+
+1545225674 source:/home/moonlight/tcpPro/FreeBSDPacketsReorganization/linklist.c
+
+1545225682 source:/home/moonlight/tcpPro/FreeBSDPacketsReorganization/llInsert.c
+	<stdio.h>
+
+1545233901 /home/moonlight/tcpPro/FreeBSDPacketsReorganization/inc/ip_queue.h
+	"../lib/types.h"
+
+1545227908 /home/moonlight/tcpPro/FreeBSDPacketsReorganization/lib/type.h
+
+1545227908 /home/moonlight/tcpPro/FreeBSDPacketsReorganization/lib/types.h
+
+1545233476 source:/home/moonlight/tcpPro/FreeBSDPacketsReorganization/ipq_opt.c
+	"inc/ip_queue.h"
+	"pthread.h"
+	<stdlib.h>
+
