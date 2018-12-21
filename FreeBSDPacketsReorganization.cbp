@@ -32,17 +32,21 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="inc/ip_queue.h" />
+		<Unit filename="inc/ipf_opt.h" />
+		<Unit filename="inc/ipq_opt.h" />
+		<Unit filename="inc/unit_test.h" />
+		<Unit filename="ipf_opt.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ipq_opt.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="lib/_color_print.h" />
 		<Unit filename="lib/types.h" />
-		<Unit filename="linklist.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="llInsert.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="unit_test.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

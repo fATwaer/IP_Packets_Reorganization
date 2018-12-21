@@ -2,6 +2,10 @@
 #define  _IP_QUEUE_H
 #include "../lib/types.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <memory.h>
+
 struct ipasfrag {
     unsigned char ip_v:4;
     unsigned char ip_hl:4;
@@ -32,6 +36,11 @@ typedef struct ip_queue_packet {
     void * ipq_data;
 }__attribute__ ((__packed__)) packet, ipq;
 
+
+enum {
+    false = 0,
+    true = 1
+};
 
 extern ipq *ipq_head;
 

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "inc/ip_queue.h"
+#include "inc/unit_test.h"
+
 int main()
 {
-    packet p1;
-    struct ipasfrag ipf;
-    printf("%d", sizeof(ipf));
+    ipq_unit_test();
+    ipf_insert_test();
 }
