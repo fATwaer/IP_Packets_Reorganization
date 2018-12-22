@@ -6,6 +6,7 @@
 #include "math.h"
 #include "lib/_color_print.h"
 #include "inc/ip_packet.h"
+
 /** ipq  */
 void
 ut_ipq_insert_destroy()
@@ -112,4 +113,7 @@ ut_ipf_reorganization()
     printf("reorganization data: %s\n", buff);
     printf("reorganization insert assert");
     print_green(" success\n");
+    free(info);
+
+    ipq_destroy();
 }

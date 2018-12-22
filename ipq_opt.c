@@ -74,21 +74,51 @@ ipq_push(packet *pkt)
  * \return
  *
  */
-
-
 struct packet_info *
 ipq_pop()
 {
-    struct packet_info *p;
+    pthread_mutex_lock(&mutex);
 
+    if (!isInit)
+        perror("ipq is not initialized");
+
+    if (ipq_head == NULL)
+        return NULL;
+
+    struct packet_info *p = NULL;
+    struct ip_queue_packet *pkt = ipq_head;
     // find a packet, MF is 0;
     //
-    // TODO
 
+    if ((p = ipf_fragment_reorganization(ipq_head)) != NULL)
+        goto POP;
 
-    p = ipf_fragment_reorganization(ipq_head);
+    pkt = ipq_head->next;
+    while (pkt != ipq_head) {
+        p = ipf_fragment_reorganization(pkt);
+        if (p != NULL)
+            goto POP;
+        pkt = pkt->next;
+    }
 
+    return NULL;
 
+POP:
+    // clean fragment
+    ipf_destroy(pkt);
+    // remove `pkt` from queue
+    if (pkt == ipq_head && pkt == ipq_tail)
+        ipq_head = ipq_tail = NULL;
+    else if (pkt == ipq_head)
+        ipq_head = pkt->next;
+    else if (pkt == ipq_tail)
+         ipq_tail = pkt->prev;
+
+    pkt->prev->next = pkt->next;
+    pkt->next->prev = pkt->prev;
+    free(pkt);
+
+    pthread_mutex_unlock(&mutex);
     return p;
 }
 
@@ -101,6 +131,9 @@ ipq_destroy() {
 
     struct ip_queue_packet *freeptr, *p;
     freeptr = p = ipq_head;
+
+    if (p == NULL)
+        return;
 
     while (p != ipq_tail) {
         p = p->next;

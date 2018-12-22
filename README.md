@@ -33,5 +33,12 @@ Code::Blocks 17.12
 
 [x] unit test: fragment reorganization
 
-tcp client/server
+[] ip pakcet struct for passing network 
+	(with associated function)
+
+[] drop packet when time out
+	- [x] time parmeter
+
+
+[] tcp client/server
 

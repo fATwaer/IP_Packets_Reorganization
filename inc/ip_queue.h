@@ -34,6 +34,7 @@ typedef struct ip_queue_packet {
     struct ipasfrag* ipq_prev;
     uint32_t ipq_src;
     uint32_t ipq_dst;
+    struct timeval ipq_lt;          // last time fragment arrived
 }__attribute__ ((__packed__)) packet, ipq;
 
 

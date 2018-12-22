@@ -16,7 +16,7 @@ void
 ipf_insert(packet* apkt, struct ipasfrag* frag)
 {
     struct ip_queue_packet *pkt = apkt;
-
+    gettimeofday(&(pkt->ipq_lt), NULL);
     if (pkt->ipq_next == NULL)
     {
         frag->ipf_next = frag;
