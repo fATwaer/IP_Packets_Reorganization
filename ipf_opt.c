@@ -60,9 +60,9 @@ ipf_insert(packet* apkt, struct ipasfrag* frag)
  *  allocate a new ip packet fragment
  */
 struct ipasfrag *
-ipf_alloc()
+ipf_alloc(int extrasize)
 {
-    struct ipasfrag *p = (struct ipasfrag *) malloc(sizeof(struct ipasfrag));
+    struct ipasfrag *p = (struct ipasfrag *) malloc(sizeof(struct ipasfrag)+extrasize);
     memset(p, 0, sizeof(struct ipasfrag));
     return p;
 }
@@ -113,7 +113,7 @@ ipf_fragment_reorganization(const struct ip_queue_packet* pkt)
     while (p != pkt->ipq_next) {
         memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len);
         length_sum += p->ip_len;
-        p = pkt->ipq_next;
+        p = p->ipf_prev;
     }
     memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len);
     length_sum += p->ip_len;
@@ -149,6 +149,7 @@ ipf_printall(packet *pkt)
         ipf_print(p);
         p = p->ipf_next;
     }
+    ipf_print(p);
 }
 
 void

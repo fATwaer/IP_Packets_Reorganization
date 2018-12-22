@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="inc/ip_packet.h" />
 		<Unit filename="inc/ip_queue.h" />
 		<Unit filename="inc/ipf_opt.h" />
 		<Unit filename="inc/ipq_opt.h" />
@@ -42,6 +43,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="lib/_color_print.h" />
+		<Unit filename="lib/lib.h" />
 		<Unit filename="lib/types.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />

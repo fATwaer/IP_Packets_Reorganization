@@ -1,7 +1,14 @@
 # IP_Packets_Reorganization
 FreeBSD Implementation
 
-# Souce File Layout
+## Platform
+``` 
+x64 GNU/Linux
+gcc version 8.2.1 
+Code::Blocks 17.12
+```
+
+## Souce File Layout
 
 ``` 
 ├── inc
@@ -24,7 +31,7 @@ FreeBSD Implementation
 
 ## TODO
 
-unit test: fragment reorganization
+[x] unit test: fragment reorganization
 
 tcp client/server
 

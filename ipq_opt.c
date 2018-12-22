@@ -15,7 +15,7 @@ static int isInit = false;
 void
 ipq_init()
 {
-    head = (struct ip_queue_packet *) malloc (sizeof(struct ip_queue_packet));
+    head = ipq_alloc();
     head->next = NULL;
     head->prev = NULL;
     isInit = true;
@@ -86,10 +86,10 @@ ipq_pop()
     // TODO
 
 
-    ipf_fragment_reorganization(ipq_head);
+    p = ipf_fragment_reorganization(ipq_head);
 
 
-    return NULL;
+    return p;
 }
 
 
@@ -111,10 +111,14 @@ ipq_destroy() {
         free(freeptr);
         freeptr = p;
     }
+    ipf_destroy(p);
     free(p);
 
     p = freeptr = NULL;
     ipq_head = ipq_tail = NULL;
+
+    free(head);
+    head = NULL;
 
     pthread_mutex_unlock(&mutex);
 }

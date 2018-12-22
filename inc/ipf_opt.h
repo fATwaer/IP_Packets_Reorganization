@@ -6,6 +6,7 @@ struct ipasfrag * ipf_alloc();
 void ipf_printall(packet *pkt);
 void ipf_print(struct ipasfrag * frag);
 void ipf_destroy(packet *pkt);
+struct packet_info * ipf_fragment_reorganization(const struct ip_queue_packet* pkt);
 #ifdef DEBUG
 #define _IPF_DEBUG 0
 #endif // DEBUG
