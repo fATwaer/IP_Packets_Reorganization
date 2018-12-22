@@ -1,6 +1,7 @@
 #ifndef  _IP_QUEUE_H
 #define  _IP_QUEUE_H
 #include "../lib/types.h"
+#include "../lib/lib.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,7 +19,7 @@ struct ipasfrag {
     uint16_t ip_sum;
     struct ipasfrag* ipf_next;
     struct ipasfrag* ipf_prev;
-    void * ipf_data;
+    struct packetdata data;
 }__attribute__ ((__packed__));
 
 
@@ -33,7 +34,6 @@ typedef struct ip_queue_packet {
     struct ipasfrag* ipq_prev;
     uint32_t ipq_src;
     uint32_t ipq_dst;
-    void * ipq_data;
 }__attribute__ ((__packed__)) packet, ipq;
 
 

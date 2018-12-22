@@ -1,4 +1,5 @@
 #include "inc/ipf_opt.h"
+#include "inc/ip_packet.h"
 
 /** insert the fragment into the linkedlist
  *  represent the fragment table.
@@ -73,6 +74,65 @@ ipf_alloc()
  * \param
  * \return
  *
+ */
+void
+ipf_destroy(packet *pkt)
+{
+    if (pkt->ipq_next == NULL)
+        return;
+    struct ipasfrag *p, *freeptr;
+    p = freeptr = pkt->ipq_next;
+    while (p != pkt->ipq_prev) {
+        p = p->ipf_next;
+        free(freeptr);
+        freeptr = p;
+    }
+    free(p);
+
+    freeptr = p = NULL;
+    pkt->ipq_prev = pkt->ipq_next = NULL;
+
+}
+
+
+/** \brief
+ *
+ * \pkt is a packet whose table has a MF bit fragment.
+ * \param
+ * \return
+ *
+ */
+struct packet_info *
+ipf_fragment_reorganization(const struct ip_queue_packet* pkt)
+{
+    struct ipasfrag *p = pkt->ipq_prev;
+    int length_sum = 0;
+    int data_length = p->ip_off + p->ip_len;
+    struct packet_info *info = (struct packet_info *)
+                                malloc (sizeof(struct packet_info) + data_length);
+    while (p != pkt->ipq_next) {
+        memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len);
+        length_sum += p->ip_len;
+        p = pkt->ipq_next;
+    }
+    memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len);
+    length_sum += p->ip_len;
+
+    if (data_length != length_sum) {
+        // this table is incompleted;
+        free (info);
+        return NULL;
+    }
+
+    info->data.buffsize = data_length;
+    info->version = p->ip_v;
+
+    return info;
+}
+
+
+/**
+ *  print all fragment
  */
 void
 ipf_printall(packet *pkt)

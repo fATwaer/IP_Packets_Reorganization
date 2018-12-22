@@ -1,7 +1,7 @@
 #ifndef UNIT_TEST_H_INCLUDED
 #define UNIT_TEST_H_INCLUDED
-void ipq_unit_test();
-void ipf_insert_test();
+void ut_ipq_insert_destroy();
+void ut_ipf_insert_destroy();
 
 
 

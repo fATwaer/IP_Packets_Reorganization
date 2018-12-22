@@ -8,7 +8,7 @@
 
 /** ipq  */
 void
-ipq_unit_test()
+ut_ipq_insert_destroy()
 {
     ipq_init();
 
@@ -24,7 +24,7 @@ ipq_unit_test()
 
     p = ipq_search(22);
     assert(p->ipq_id == 22);
-    printf("iqp insert assert");
+    printf("IPQ insert assert");
     print_green(" success\n");
     assert(ipq_getTail()->ipq_id == 39);
     //queue_print();
@@ -34,7 +34,7 @@ ipq_unit_test()
 
 /** ipf */
 void
-ipf_insert_test()
+ut_ipf_insert_destroy()
 {
 
     ipq_init();
@@ -59,7 +59,11 @@ ipf_insert_test()
         fragptr->ip_off = i;
         ipf_insert(p, fragptr);
     }
-    ipf_printall(p);
-
+    //ipf_printall(p);
+    ipf_destroy(p);
+    assert(p->ipq_next == NULL);
+    printf("IPF insert assert");
+    print_green(" success\n");
+    free(p);
 }
 

@@ -1,18 +1,23 @@
 #include "inc/ipq_opt.h"
 #include "pthread.h"
+#include "inc/ipf_opt.h"
+#include "inc/ip_packet.h"
 
-
-ipq *ipq_head;
+struct ip_queue_packet *head;
+#define ipq_head  (head->next)
+#define ipq_tail  (head->prev)
+//ipq *ipq_head;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-static ipq* ipq_tail;
+//static ipq* ipq_tail;
 static int isInit = false;
 
 
 void
 ipq_init()
 {
-    ipq_head = NULL;
-    ipq_tail = NULL;
+    head = (struct ip_queue_packet *) malloc (sizeof(struct ip_queue_packet));
+    head->next = NULL;
+    head->prev = NULL;
     isInit = true;
 }
 
@@ -62,9 +67,28 @@ ipq_push(packet *pkt)
 }
 
 
-packet *
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+
+struct packet_info *
 ipq_pop()
 {
+    struct packet_info *p;
+
+    // find a packet, MF is 0;
+    //
+    // TODO
+
+
+    ipf_fragment_reorganization(ipq_head);
+
+
     return NULL;
 }
 
@@ -80,7 +104,10 @@ ipq_destroy() {
 
     while (p != ipq_tail) {
         p = p->next;
-        // ! ipf not free
+
+        // clean fragment
+        ipf_destroy(freeptr);
+
         free(freeptr);
         freeptr = p;
     }
