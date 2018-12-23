@@ -7,6 +7,18 @@ x64 GNU/Linux
 gcc version 8.2.1 
 Code::Blocks 17.12
 ```
+## Example
+
+``` bash
+[server]
+$ ./FreeBSDPacketsReorganization -s
+
+[client]
+$./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
+
+```
+
+
 
 ## Souce File Layout
 
