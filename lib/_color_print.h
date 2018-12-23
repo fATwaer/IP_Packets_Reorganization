@@ -31,20 +31,7 @@
 #define RED_PRINT printf(L_RED);
 #define GREEN_PRINT printf(L_GREEN);
 
-void
-print_red(char *str)
-{
-    RED_PRINT;
-    printf(str);
-    NORMAL_PRINT;
-}
-
-void
-print_green(char *str)
-{
-    GREEN_PRINT;
-    printf(str);
-    NORMAL_PRINT;
-}
+void print_red(char *str);
+void print_green(char *str);
 
 #endif // _COLOR_PRINT_H_INCLUDED

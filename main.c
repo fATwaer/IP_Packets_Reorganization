@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "inc/unit_test.h"
 #include "time.h"
+#include "inc/paser.h"
 
-
-int main()
+int main(int argc, char * argv[])
 {
-    ut_ipf_insert_destroy();
-    ut_ipq_insert_destroy();
-    ut_ipf_reorganization();
+    paser_commandline(argc, argv);
+
+    exit(0);
 }

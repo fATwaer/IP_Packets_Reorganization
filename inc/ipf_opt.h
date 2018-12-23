@@ -1,7 +1,8 @@
 #ifndef IPF_OPT_H_INCLUDED
 #define IPF_OPT_H_INCLUDED
+
 #include "ip_queue.h"
-#include "time.h"
+#include <sys/time.h>
 
 void ipf_insert(packet* apkt, struct ipasfrag* frag);
 struct ipasfrag * ipf_alloc();

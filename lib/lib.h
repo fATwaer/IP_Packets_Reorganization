@@ -1,5 +1,10 @@
 #ifndef LIB_H_INCLUDED
 #define LIB_H_INCLUDED
+#include "stdlib.h"
+#include <stdio.h>
+#include "_color_print.h"
+
+void err_exit(char * err_msg);
 
 
 struct packetdata {

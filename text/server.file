@@ -1,0 +1,37 @@
+SCTP is a reliable, general-purpose transport layer protocol for use on IP networks. While the protocol was originally designed for telephony signaling (under the RFC 2960), SCTP provided an added bonus -- it solved some of the limitations of TCP while borrowing beneficial features of UDP. SCTP provides features for high availability, increased reliability, and improved security for socket initiation. (Figure 1 shows the layered architecture of the IP stack.)
+This article introduces the concept of SCTP in the Linux 2.6 kernel, highlights some of the advanced features (such as multi-homing and -streaming), and provides server and client source code snippets (with a URL to more code) to demonstrate the protocol's ability to deliver multi-streaming.
+The Internet protocol suite is split into several layers; each layer provides specific functionality as shown in Figure 1.
+
+Starting from the bottom:
+
+The link layer provides the physical interface to the communication medium (such as an Ethernet device).
+The network layer manages the movement of packets in a network, specifically making sure packets get to their destination (also called routing).
+The transport layer regulates the flow of packets between two hosts for the application layer. It also presents the application endpoint for communication, known as a port.
+Finally, the application layer provides meaning to the data transported through the socket. This data could consist of e-mail messages using the Simple Mail Transport Protocol (SMTP) or Web pages rendered through the Hypertext Transport Protocol (HTTP).
+All application layer protocols use the sockets layer as their interface to the transport layer protocol. The Sockets API was developed at UC Berkeley within the BSD UNIX® operating system.
+
+Now for a quick refresher on traditional transport layer protocols before we dive into the workings of SCTP.
+
+he two most popular transport layer protocols are the transmission control protocol (TCP) and the user datagram protocol (UDP):
+
+TCP is a reliable protocol that guarantees sequenced, ordered delivery of data and manages congestion within a network.
+UDP is a message-oriented protocol that neither guarantees ordering of delivery nor manages congestion.
+However, UDP is a fast protocol that preserves the boundaries of the messages it transports.
+
+This article presents another option: SCTP. It provides the reliable, ordered delivery of data like TCP but operates in the message-oriented fashion like UDP, preserving message boundaries. SCTP also provides several advanced features:
+
+Multi-homing
+Multi-streaming
+Initiation protection
+Message framing
+Configurable unordered delivery
+Graceful shutdown
+
+Multi-homing provides applications with higher availability than those that use TCP. A multi-homed host is one that has more than one network interface and therefore more than one IP address for which it can be addressed. In TCP, a connection refers to a channel between two endpoints (in this case, a socket between the interfaces of two hosts). SCTP introduces the concept of an association that exists between two hosts but can potentially collaborate with multiple interfaces at each host.
+At the top is a TCP connection. Each host includes a single network interface; a connection is created between a single interface on each of the client and server. Upon establishment, the connection is bound to each interface.
+
+At the bottom of the figure, you can see an architecture that includes two network interfaces per host. Two paths are provided through the independent networks, one from interface C0 to S0 and another from C1 to S1. In SCTP, these two paths would be collected into an association.
+
+SCTP monitors the paths of the association using a built-in heartbeat; upon detecting a path failure, the protocol sends traffic over the alternate path. It's not even necessary for the applications to know that a failover recovery occurred.
+
+Failover can also be used to maintain network application connectivity. For example, consider a laptop that includes a wireless 802.11 interface and an Ethernet interface. When the laptop is in its docking station, the higher-speed Ethernet interface would be preferred (in SCTP, called the primary address); but upon loss of this connection (removal from the docking station), connections would be failed over to the wireless interface. Upon return to the docking station, the Ethernet connection would be detected and communication resumed over this interface. This is a powerful mechanism for providing high availability and increased reliability.
