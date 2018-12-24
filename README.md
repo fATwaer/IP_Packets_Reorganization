@@ -63,7 +63,7 @@ $./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
 ```
 [x] unit test: fragment reorganization
 
-[] ip pakcet struct for passing network 
+[x] ip pakcet struct for passing network 
 	(with associated function)
 
 [] drop packet when time out
