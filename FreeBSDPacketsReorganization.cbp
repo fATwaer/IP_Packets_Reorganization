@@ -31,10 +31,19 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="client.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="inc/client.h" />
 		<Unit filename="inc/ip_packet.h" />
 		<Unit filename="inc/ip_queue.h" />
 		<Unit filename="inc/ipf_opt.h" />
+		<Unit filename="inc/ipq.h" />
 		<Unit filename="inc/ipq_opt.h" />
+		<Unit filename="inc/netpkt.h" />
+		<Unit filename="inc/paser.h" />
+		<Unit filename="inc/server.h" />
+		<Unit filename="inc/transmission.h" />
 		<Unit filename="inc/unit_test.h" />
 		<Unit filename="ipf_opt.c">
 			<Option compilerVar="CC" />
@@ -48,7 +57,19 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="netpkt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="paser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="server.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="unit_test.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utility.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

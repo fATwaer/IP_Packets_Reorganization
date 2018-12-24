@@ -1,6 +1,8 @@
 #include "inc/paser.h"
 
 int hasConfigFile;
+int hasPacketOpt;
+int globalmtu;
 
 static struct option long_options[] = {
     {"server",  optional_argument, 0,  's' },
@@ -21,6 +23,7 @@ paser_commandline(int argc, char *argv[])
     int servport = 0;
     char servaddr[ADDRMAXLEN];
 
+    globalmtu = 500;
 
     if (argc < 2)
         print_help();

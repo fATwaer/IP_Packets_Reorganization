@@ -5,7 +5,7 @@
 #include "_color_print.h"
 
 void err_exit(char * err_msg);
-
+void err_print(char * err_msg);
 
 struct packetdata {
     int buffsize;

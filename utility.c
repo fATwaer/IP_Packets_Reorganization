@@ -26,3 +26,10 @@ print_green(char *str)
     fprintf(stdout, str);
     NORMAL_PRINT;
 }
+
+void
+err_print(char * err_msg)
+{
+    print_red(err_msg);
+    fflush(stdout);
+}
