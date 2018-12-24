@@ -28,8 +28,10 @@ ut_ipq_insert_destroy()
     printf("IPQ insert assert");
     print_green(" success\n");
     assert(ipq_getTail()->ipq_id == 39);
-    //queue_print();
-
+    queue_print();
+    printf("\n");
+    ipq_delete(ipq_search(22));
+    queue_print();
     ipq_destroy();
 
 }

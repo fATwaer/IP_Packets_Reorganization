@@ -4,6 +4,7 @@
 extern int hasConfigFile;
 extern int hasPacketOpt;
 extern int globalmtu;
+extern unsigned int packeDelay;
 
 void
 server(int port)
@@ -70,11 +71,10 @@ server(int port)
                 netpkt_setoff(pkt, i);
                 memcpy((void *)pkt->np_data + optlen, buff, datalen);
                 memset(buff, 0, SERVBUFMAXLINE);
-                //sleep(1);
+                sleep(packeDelay);
                 write(connfd, pkt, pkt->np_len);
             }
-
-
+            sleep(packeDelay);
             printf("i %d n %d \n", i, n);
             // last fragment
             free(pkt);

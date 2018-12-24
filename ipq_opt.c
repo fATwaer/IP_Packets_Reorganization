@@ -10,7 +10,8 @@ struct ip_queue_packet *head = NULL;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 //static ipq* ipq_tail;
 static int isInit = false;
-
+extern time_t sec;
+extern long usec;
 
 void
 ipq_init()
@@ -193,6 +194,63 @@ ipq_search(uint16_t ip_id)
     return NULL;
 }
 
+void
+ipq_check() {
+    struct timeval tv;
+    if (!isInit)
+        return;
+    if (ipq_head == NULL)
+        return ;
+
+    if (ipq_head == ipq_tail)
+    {
+        gettimeofday(&tv, NULL);
+        if (tv.tv_sec - ipq_head->ipq_lt.tv_sec) {
+            ipq_delete(ipq_head);
+            printf("[time out drop]\n");
+        }
+
+        return;
+    }
+
+    struct ip_queue_packet *pkt = ipq_head;
+
+    pkt = ipq_head->next;
+    while (pkt != ipq_tail) {
+        gettimeofday(&tv, NULL);
+        if (ipf_fragment_reorganization(pkt) == NULL &&
+            tv.tv_sec - pkt->ipq_lt.tv_sec > sec) {
+            printf("[time out drop]\n");
+            ipq_delete(pkt);
+        }
+
+        pkt = pkt->next;
+    }
+}
+
+
+void
+ipq_delete(struct ip_queue_packet *pkt)
+{
+    if (pkt == NULL)
+        return;
+
+    pthread_mutex_lock(&mutex);
+    // clean fragment
+    ipf_destroy(pkt);
+    // remove `pkt` from queue
+    if (pkt == ipq_head && pkt == ipq_tail)
+        ipq_head = ipq_tail = NULL;
+    else if (pkt == ipq_head)
+        ipq_head = pkt->next;
+    else if (pkt == ipq_tail)
+         ipq_tail = pkt->prev;
+
+    pkt->prev->next = pkt->next;
+    pkt->next->prev = pkt->prev;
+    free(pkt);
+    pthread_mutex_unlock(&mutex);
+}
 
 
 void

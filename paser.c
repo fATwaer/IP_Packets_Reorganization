@@ -3,7 +3,7 @@
 //int hasConfigFile;
 int hasPacketOpt;
 int globalmtu;
-
+unsigned int packeDelay;
 
 static struct option long_options[] = {
     {"server",  optional_argument, 0,  's' },
@@ -12,6 +12,7 @@ static struct option long_options[] = {
     {"help",  no_argument, 0,  'h' },
     {"file", required_argument,       0,  'f' },
     {"test",  no_argument, 0, 't'},
+    {"dalay", required_argument, 0, 'd'},
     {0,         0,         0,  0 }
 };
 
@@ -24,12 +25,12 @@ paser_commandline(int argc, char *argv[])
     int servport = 0;
     char servaddr[ADDRMAXLEN], key[KEYMAX], value[VALUEMAX];
     globalmtu = 500;
-
+    packeDelay = 0;
     if (argc < 2)
         print_help();
 
     while (1) {
-        c = getopt_long(argc, argv, "s::c:hf:p:t",
+        c = getopt_long(argc, argv, "d:s::c:hf:p:t",
                         long_options, &index);
 
         if (c == -1)
@@ -37,7 +38,8 @@ paser_commandline(int argc, char *argv[])
 
         switch (c) {
         case 's':
-            printf("server\n");
+            print_red("[server] ");
+            printf("start\n");
             if (optarg)
                 server(atoi(optarg));
             else
@@ -47,7 +49,8 @@ paser_commandline(int argc, char *argv[])
             print_help();
             break;
         case 'c':
-            printf("client : %s\n", optarg);
+            print_red("[client] ");
+            printf(" connect to %s\n", optarg);
             strncpy(servaddr, optarg, strlen(optarg));
             break;
         case 'p':
@@ -60,12 +63,18 @@ paser_commandline(int argc, char *argv[])
             FILE *fp = fopen(optarg, "r");
             while (fscanf(fp, "%s = %s", key, value) != EOF)
                 printf("key %s: value %s\n", key, value);
+            //
+            //
             fclose(fp);
+            break;
+        case 'd':
+            packeDelay = atoi(optarg);
             break;
         case 't':
             ut_ipf_insert_destroy();
             ut_ipq_insert_destroy();
             ut_ipf_reorganization();
+            exit(0);
             break;
         default:
             ;

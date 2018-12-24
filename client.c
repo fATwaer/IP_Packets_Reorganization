@@ -3,6 +3,8 @@
 extern int globalmtu;
 static int checkthread = false;
 static int initqueue = false;
+time_t sec = 2;
+long usec;
 
 void
 client(char *addr, int port)
@@ -32,13 +34,17 @@ client(char *addr, int port)
 
     p = ipq_pop();
     if (p == NULL)
-        err_exit("null");
+    {
+        print_red("[no valid packet in queue]\n");
+        exit(-1);
+    }
 
     printf("DATA : \n\n");
     print_green("[BEGIN]");
     printf("%s", p->data.address);
     print_green("[END]\n");
 
+    pause();
 }
 
 int
@@ -53,10 +59,11 @@ handle_connection_packet(int fd)
     if ((r = pthread_create(&tid, NULL, handle_packet_routine, (void *)&fd)) != 0)
         err_print("[create thread] error");
     if (!checkthread) {
-        if ((r = pthread_create(&checktid, &attr, check_thread_routine, NULL)) != 0)
+        if ((r = pthread_create(&checktid, NULL, check_thread_routine, NULL)) != 0)
             err_print("[create thread] error");
         checkthread = true;
     }
+    //if ((r = pthread_create()))
     pthread_attr_destroy(&attr);
     pthread_join(tid, NULL);
     return 0;
@@ -124,7 +131,10 @@ cli_insert_fragment(struct ipasfrag *frag, uint32_t src, uint32_t dst)
 void *
 check_thread_routine(void *args)
 {
-    return NULL;
+    while (1) {
+        ipq_check();
+        sleep(sec);
+    }
 }
 
 

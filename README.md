@@ -15,10 +15,15 @@ Code::Blocks 17.12
 $ make
 
 [server]
+# no delay
 $ ./pktreorg -s
+# delay 1s
+$ ./pktreorg -d 1 -s
+
 
 [client]
 $./pktreorg -c 127.0.0.1 -p 6777
+
 
 ```
 
@@ -79,11 +84,12 @@ $./pktreorg -c 127.0.0.1 -p 6777
 [x] ip pakcet struct for passing network 
 	(with associated function)
 
-[] drop packet when time out
+[x] drop packet when time out
 	- [x] time parmeter
 
 [] error usage information print
 
+[] file config support
 
 [] create thread to interact with user
 
