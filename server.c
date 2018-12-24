@@ -58,9 +58,9 @@ server(int port)
 
             struct network_packet *pkt = NULL;
             // fill packet
-            if (!hasConfigFile) {
-                pkt = netpkt_alloc(globalmtu, optlen);
-            }
+
+            pkt = netpkt_alloc(globalmtu, optlen);
+
 
             netpkt_fill(pkt, 0, *((uint32_t *)&cliaddr.sin_addr), 1, 233);
             datalen = globalmtu - pkt->np_hl * 4;
@@ -70,6 +70,7 @@ server(int port)
                 netpkt_setoff(pkt, i);
                 memcpy((void *)pkt->np_data + optlen, buff, datalen);
                 memset(buff, 0, SERVBUFMAXLINE);
+                //sleep(1);
                 write(connfd, pkt, pkt->np_len);
             }
 

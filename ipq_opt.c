@@ -3,7 +3,7 @@
 #include "inc/ipf_opt.h"
 #include "inc/ip_packet.h"
 
-struct ip_queue_packet *head;
+struct ip_queue_packet *head = NULL;
 #define ipq_head  (head->next)
 #define ipq_tail  (head->prev)
 //ipq *ipq_head;
@@ -15,10 +15,14 @@ static int isInit = false;
 void
 ipq_init()
 {
+    pthread_mutex_lock(&mutex);
+    if (head != NULL)
+        return;
     head = ipq_alloc();
     head->next = NULL;
     head->prev = NULL;
     isInit = true;
+    pthread_mutex_unlock(&mutex);
 }
 
 packet *
@@ -33,7 +37,7 @@ void
 ipq_push(packet *pkt)
 {
     if (!isInit)
-        perror("ipq is not initialized");
+        err_exit("[ipq_push not init]");
 
     pthread_mutex_lock(&mutex);
 
@@ -44,6 +48,7 @@ ipq_push(packet *pkt)
         ipq_head->prev = pkt;
         ipq_tail = pkt;
 
+        pthread_mutex_unlock(&mutex);
         return;
     }
 
@@ -80,7 +85,7 @@ ipq_pop()
     pthread_mutex_lock(&mutex);
 
     if (!isInit)
-        perror("ipq is not initialized");
+        return NULL;
 
     if (ipq_head == NULL)
         return NULL;
@@ -100,7 +105,7 @@ ipq_pop()
             goto POP;
         pkt = pkt->next;
     }
-
+    pthread_mutex_unlock(&mutex);
     return NULL;
 
 POP:
@@ -171,6 +176,9 @@ ipq_getHead()
 packet *
 ipq_search(uint16_t ip_id)
 {
+    if (ipq_head == NULL)
+        return NULL;
+
     if (ip_id == ipq_head->ipq_id)
         return ipq_head;
 

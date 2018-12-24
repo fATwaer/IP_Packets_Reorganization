@@ -107,16 +107,16 @@ ipf_fragment_reorganization(const struct ip_queue_packet* pkt)
 {
     struct ipasfrag *p = pkt->ipq_prev;
     int length_sum = 0;
-    int data_length = p->ip_off + p->ip_len;
+    int data_length = p->ip_off + p->ip_len - p->ip_hl * 4;
     struct packet_info *info = (struct packet_info *)
                                 malloc (sizeof(struct packet_info) + data_length);
     while (p != pkt->ipq_next) {
-        memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len);
-        length_sum += p->ip_len;
+        memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len- p->ip_hl * 4);
+        length_sum += p->ip_len - p->ip_hl * 4;
         p = p->ipf_prev;
     }
-    memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len);
-    length_sum += p->ip_len;
+    memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len- p->ip_hl * 4);
+    length_sum += p->ip_len - p->ip_hl * 4;
 
     if (data_length != length_sum) {
         // this table is incompleted;

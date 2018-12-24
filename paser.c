@@ -1,8 +1,9 @@
 #include "inc/paser.h"
 
-int hasConfigFile;
+//int hasConfigFile;
 int hasPacketOpt;
 int globalmtu;
+
 
 static struct option long_options[] = {
     {"server",  optional_argument, 0,  's' },
@@ -21,15 +22,14 @@ paser_commandline(int argc, char *argv[])
     int index = 0;
     // for client to connect server
     int servport = 0;
-    char servaddr[ADDRMAXLEN];
-
+    char servaddr[ADDRMAXLEN], key[KEYMAX], value[VALUEMAX];
     globalmtu = 500;
 
     if (argc < 2)
         print_help();
 
     while (1) {
-        c = getopt_long(argc, argv, "s::c:hf:p:",
+        c = getopt_long(argc, argv, "s::c:hf:p:t",
                         long_options, &index);
 
         if (c == -1)
@@ -52,6 +52,15 @@ paser_commandline(int argc, char *argv[])
             break;
         case 'p':
             servport = atoi(optarg);
+            break;
+        case 'f':
+            printf("file: %s\n" , optarg);
+            memset(key, 0, KEYMAX);
+            memset(value, 0, VALUEMAX);
+            FILE *fp = fopen(optarg, "r");
+            while (fscanf(fp, "%s = %s", key, value) != EOF)
+                printf("key %s: value %s\n", key, value);
+            fclose(fp);
             break;
         case 't':
             ut_ipf_insert_destroy();

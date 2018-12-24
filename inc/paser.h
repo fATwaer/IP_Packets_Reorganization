@@ -8,6 +8,8 @@
 #include "client.h"
 
 #define ADDRMAXLEN 50
+#define KEYMAX 24
+#define VALUEMAX 256
 
 int paser_commandline(int argc, char *argv[]);
 void print_help();
