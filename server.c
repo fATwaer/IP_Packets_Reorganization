@@ -17,7 +17,7 @@ server(int port)
     char buff[SERVBUFMAXLINE] = {0};
     char namebuff[SERVBUFMAXLINE] = {0};
 
-    chdir(ROOTDIR);
+
     if ((textfd = open("./text/server.file", O_RDONLY)) < 0)
         err_exit("[open text file]");
 

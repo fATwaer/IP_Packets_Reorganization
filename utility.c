@@ -16,6 +16,7 @@ print_red(char *str)
 {
     RED_PRINT;
     fprintf(stdout, str);
+    fflush(stdout);
     NORMAL_PRINT;
 }
 
@@ -24,6 +25,7 @@ print_green(char *str)
 {
     GREEN_PRINT;
     fprintf(stdout, str);
+    fflush(stdout);
     NORMAL_PRINT;
 }
 

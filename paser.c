@@ -12,7 +12,7 @@ static struct option long_options[] = {
     {"help",  no_argument, 0,  'h' },
     {"file", required_argument,       0,  'f' },
     {"test",  no_argument, 0, 't'},
-    {0,         0,                 0,  0 }
+    {0,         0,         0,  0 }
 };
 
 int
@@ -81,5 +81,6 @@ paser_commandline(int argc, char *argv[])
 void
 print_help()
 {
-    printf("help infomation\n");
+    print_red("[usage error]\n");
+    exit(-1);
 }

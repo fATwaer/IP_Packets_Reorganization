@@ -7,14 +7,18 @@ x64 GNU/Linux
 gcc version 8.2.1 
 Code::Blocks 17.12
 ```
-## Example
+## Usage
 
 ``` bash
+
+[compile]
+$ make
+
 [server]
-$ ./FreeBSDPacketsReorganization -s
+$ ./pktreorg -s
 
 [client]
-$./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
+$./pktreorg -c 127.0.0.1 -p 6777
 
 ```
 
@@ -27,6 +31,11 @@ $./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
 │   └── Debug
 │       └── FreeBSDPacketsReorganization
 ├── client.c
+├── config
+│   └── config
+├── FreeBSDPacketsReorganization.cbp
+├── FreeBSDPacketsReorganization.depend
+├── FreeBSDPacketsReorganization.layout
 ├── inc
 │   ├── client.h
 │   ├── ipf_opt.h
@@ -34,8 +43,8 @@ $./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
 │   ├── ipq.h
 │   ├── ipq_opt.h
 │   ├── ip_queue.h
+│   ├── netpkt.h
 │   ├── paser.h
-│   ├── server
 │   ├── server.h
 │   └── unit_test.h
 ├── ipf_opt.c
@@ -47,13 +56,17 @@ $./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
 ├── log
 │   └── server.log
 ├── main.c
+├── Makefile
+├── netpkt.c
 ├── paser.c
+├── pktreorg
 ├── README.md
 ├── server.c
 ├── text
 │   └── server.file
 ├── unit_test.c
 └── utility.c
+
 
 ```
 
@@ -68,6 +81,11 @@ $./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
 
 [] drop packet when time out
 	- [x] time parmeter
+
+[] error usage information print
+
+
+[] create thread to interact with user
 
 [x] insert packets into ip linkedlist
 

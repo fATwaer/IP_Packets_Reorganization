@@ -1,3 +1,4 @@
 RootPath = .
 GlobalMTU = 500
+ServerPort = 6777
 

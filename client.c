@@ -33,8 +33,12 @@ client(char *addr, int port)
     p = ipq_pop();
     if (p == NULL)
         err_exit("null");
-    printf("[data] : %s\n", p->data.address);
-    pause();
+
+    printf("DATA : \n\n");
+    print_green("[BEGIN]");
+    printf("%s", p->data.address);
+    print_green("[END]\n");
+
 }
 
 int

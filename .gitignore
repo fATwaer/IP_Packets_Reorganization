@@ -1,0 +1,6 @@
+/CMakeFiles/
+/bin/
+pktreorg
+/obj/
+*.txt
+*.cmake
