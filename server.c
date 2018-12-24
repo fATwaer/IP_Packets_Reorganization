@@ -66,7 +66,8 @@ server(int port)
             datalen = globalmtu - pkt->np_hl * 4;
             for (i = 0; (n = read(textfd, buff, datalen)) > 0 && n == datalen; i += datalen) {
                 printf("i %d\n", i);
-                pkt->np_off = i;
+                //pkt->np_off = i;
+                netpkt_setoff(pkt, i);
                 memcpy((void *)pkt->np_data + optlen, buff, datalen);
                 memset(buff, 0, SERVBUFMAXLINE);
                 write(connfd, pkt, pkt->np_len);
@@ -77,8 +78,9 @@ server(int port)
             // last fragment
             free(pkt);
             pkt = netpkt_alloc(n + 20, optlen);
-            netpkt_setoff(pkt, i);
             netpkt_fill(pkt, 0, *((uint32_t *)&cliaddr.sin_addr), 0, 233);
+            netpkt_setoff(pkt, i);
+            //pkt->np_off = i;
             memcpy((void *)pkt->np_data + optlen, buff, n);
             memset(buff, 0, SERVBUFMAXLINE);
             write(connfd, pkt, pkt->np_len);

@@ -41,7 +41,7 @@ paser_commandline(int argc, char *argv[])
             if (optarg)
                 server(atoi(optarg));
             else
-                server(6777);
+                server(6777);               // never return
             break;
         case 'h':
             print_help();
@@ -63,7 +63,7 @@ paser_commandline(int argc, char *argv[])
         }
     }
     if (servport != 0 && servaddr != NULL)
-        client(servaddr, servport);
+        client(servaddr, servport);         // never return
     else
         print_help();
     return 0;

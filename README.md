@@ -69,5 +69,8 @@ $./FreeBSDPacketsReorganization -c 127.0.0.1 -p 6777
 [] drop packet when time out
 	- [x] time parmeter
 
+[] insert packets into ip linkedlist
+
+
 [x] tcp client/server
 ```

@@ -34,4 +34,3 @@ At the bottom of the figure, you can see an architecture that includes two netwo
 
 SCTP monitors the paths of the association using a built-in heartbeat; upon detecting a path failure, the protocol sends traffic over the alternate path. It's not even necessary for the applications to know that a failover recovery occurred.
 
-Failover can also be used to maintain network application connectivity. For example, consider a laptop that includes a wireless 802.11 interface and an Ethernet interface. When the laptop is in its docking station, the higher-speed Ethernet interface would be preferred (in SCTP, called the primary address); but upon loss of this connection (removal from the docking station), connections would be failed over to the wireless interface. Upon return to the docking station, the Ethernet connection would be detected and communication resumed over this interface. This is a powerful mechanism for providing high availability and increased reliability.

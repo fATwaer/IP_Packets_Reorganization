@@ -5,10 +5,8 @@ extern int globalmtu;
 void
 client(char *addr, int port)
 {
-    int    n, sockfd;
+    int     sockfd;
     struct sockaddr_in servaddr;
-    char buff[CLIBUFMAXLINE] = {0};
-
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -23,12 +21,42 @@ client(char *addr, int port)
         err_exit("[connection]");
     }
 
+    handle_connection_packet(sockfd);
+
+    pause();
+}
+
+int
+handle_connection_packet(int fd)
+{
+    int r;
+    pthread_t tid;
+    pthread_attr_t attr;
+
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    if ((r = pthread_create(&tid, &attr, handle_packet_routine, (void *)&fd)) != 0)
+        err_print("[create thread] error");
+
+    return 0;
+}
+
+void *
+handle_packet_routine(void *args)
+{
+    int fd = *(int *)args;
+    int n, datalen;
     struct network_packet *pkt = netpkt_alloc(globalmtu, 0);
-    printf("head len %d\n", globalmtu);
-    while ((n = readn(sockfd, pkt, globalmtu)) > 0)  {
-        printf("recv offset %d\n", pkt->np_off);
+
+    while ((n = readn(fd, pkt, 20)) > 0) {
+        printf("offset %d len %d\n", pkt->np_off, pkt->np_len);
+        datalen = pkt->np_len - pkt->np_hl * 4;
+        if (read(fd, pkt->np_data, datalen) < 0)
+            err_print("[recv error]");
+
     }
 
+    return (void *)0;
 }
 
 
