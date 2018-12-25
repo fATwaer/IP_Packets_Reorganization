@@ -18,5 +18,6 @@
 #define DEFMTU 500
 
 void server(int port);
+void send_file_fragment(char *file_path, int connfd, uint32_t src, uint32_t dst, uint16_t id);
 
 #endif // SERVER_H_INCLUDED

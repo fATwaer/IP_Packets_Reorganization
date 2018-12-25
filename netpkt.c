@@ -32,7 +32,7 @@ netpkt_fill(struct network_packet *pkt, uint32_t src,
 {
     pkt->np_v = 4;
     pkt->np_tos = 0;
-    pkt->np_id = 0;
+    pkt->np_id = id;
     pkt->np_ttl = 0;
     pkt->np_p = 0;
     pkt->np_sum = 0;

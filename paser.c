@@ -4,6 +4,7 @@
 int hasPacketOpt;
 int globalmtu;
 unsigned int packeDelay;
+size_t optlen;
 
 static struct option long_options[] = {
     {"server",  optional_argument, 0,  's' },
@@ -24,8 +25,11 @@ paser_commandline(int argc, char *argv[])
     // for client to connect server
     int servport = 0;
     char servaddr[ADDRMAXLEN], key[KEYMAX], value[VALUEMAX];
+
     globalmtu = 500;
     packeDelay = 0;
+    optlen = 0;
+
     if (argc < 2)
         print_help();
 

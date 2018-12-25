@@ -44,6 +44,18 @@ client(char *addr, int port)
     printf("%s", p->data.address);
     print_green("[END]\n");
 
+    p = ipq_pop();
+    if (p == NULL)
+    {
+        print_red("[no valid packet in queue]\n");
+        exit(-1);
+    }
+
+    printf("DATA : \n\n");
+    print_green("[BEGIN]");
+    printf("%s", p->data.address);
+    print_green("[END]\n");
+
     pause();
 }
 
