@@ -14,5 +14,9 @@
 int paser_commandline(int argc, char *argv[]);
 void print_help();
 
+struct help_info {
+    char *key;
+    char *value;
+};
 
 #endif // PASER_H_INCLUDED

@@ -87,9 +87,24 @@ paser_commandline(int argc, char *argv[])
     return 0;
 }
 
+
+ static struct help_info help[] = {
+    {"-c", "start client"},
+    {"-s", "start server"},
+    {"-d", "set delay"},
+    {"-t", "unit test"},
+    {"-p", "server port the client connect to"},
+    {"-h", "help infomation"},
+    {"-f", "set config file"},
+    {0, 0}
+};
+
 void
 print_help()
 {
     print_red("[usage error]\n");
+    for (int i = 0; help[i].key != NULL || help[i].value != NULL; i++) {
+        printf("%s\t%s\n", help[i].key, help[i].value);
+    }
     exit(-1);
 }
