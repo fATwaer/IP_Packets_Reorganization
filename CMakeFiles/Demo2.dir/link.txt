@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/Demo2.dir/client.c.o CMakeFiles/Demo2.dir/ipf_opt.c.o CMakeFiles/Demo2.dir/ipq_opt.c.o CMakeFiles/Demo2.dir/main.c.o CMakeFiles/Demo2.dir/netpkt.c.o CMakeFiles/Demo2.dir/paser.c.o CMakeFiles/Demo2.dir/server.c.o CMakeFiles/Demo2.dir/unit_test.c.o CMakeFiles/Demo2.dir/utility.c.o  -o Demo2 -lpthread 
