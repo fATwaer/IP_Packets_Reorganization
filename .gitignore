@@ -2,5 +2,3 @@
 /bin/
 pktreorg
 /obj/
-*.txt
-*.cmake
