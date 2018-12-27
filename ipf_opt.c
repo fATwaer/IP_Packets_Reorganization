@@ -107,9 +107,20 @@ ipf_fragment_reorganization(const struct ip_queue_packet* pkt)
 {
     struct ipasfrag *p = pkt->ipq_prev;
     int length_sum = 0;
-    int data_length = p->ip_off + p->ip_len - p->ip_hl * 4;
+    int data_length = 0;
     struct packet_info *info = (struct packet_info *)
                                 malloc (sizeof(struct packet_info) + data_length);
+    while (p != pkt->ipq_next) {
+        if (p->ipf_mff == 0) {
+            data_length = p->ip_off + p->ip_len - p->ip_hl * 4;
+            break;
+        }
+    }
+
+    if (data_length == 0)
+        return NULL;
+
+    p = pkt->ipq_prev;
     while (p != pkt->ipq_next) {
         memcpy((void *)(info->data.address) + p->ip_off, p->data.address, p->ip_len- p->ip_hl * 4);
         length_sum += p->ip_len - p->ip_hl * 4;
