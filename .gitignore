@@ -1,3 +1,7 @@
 /bin/
 /obj/
 pktreorg
+/CMakeFiles/
+*.cmake
+Makefile
+pktreorg

@@ -6,12 +6,14 @@ FreeBSD Implementation
 x64 GNU/Linux
 gcc version 8.2.1 
 Code::Blocks 17.12
+cmake 3.10
 ```
 ## Usage
 
 ``` bash
 
 [compile]
+$ cmake .
 $ make
 
 [server]
@@ -32,9 +34,6 @@ $./pktreorg -c 127.0.0.1 -p 6777
 ## Souce File Layout
 
 ``` 
-├── bin
-│   └── Debug
-│       └── FreeBSDPacketsReorganization
 ├── client.c
 ├── config
 │   └── config
@@ -87,7 +86,7 @@ $./pktreorg -c 127.0.0.1 -p 6777
 [x] drop packet when time out
 	- [x] time parmeter
 
-[] error usage information print
+[x] error usage information print
 
 [] file config support
 
