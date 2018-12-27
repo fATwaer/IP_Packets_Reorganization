@@ -11,6 +11,8 @@
 #include <time.h>
 #include <arpa/inet.h>
 #include "netpkt.h"
+#include <dirent.h>
+#include <signal.h>
 
 #define SERVBUFMAXLINE 4096
 #define SERVBACKLOG 5

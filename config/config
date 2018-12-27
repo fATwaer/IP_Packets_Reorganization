@@ -1,4 +1,7 @@
 RootPath = .
-GlobalMTU = 500
+
+GlobalMTU = 576
+
 ServerPort = 6777
 
+TextPath = ./text/

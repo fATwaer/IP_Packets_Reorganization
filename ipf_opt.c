@@ -155,12 +155,22 @@ ipf_printall(packet *pkt)
 void
 ipf_print(struct ipasfrag * frag)
 {
-    for (int i = 0; i < 8; i++)
-        printf("-");
-    char * outstr = "[vesion] %d [head length] %d [MF] %d [fragment length] %d \n"
+    char buf[65] = {0};
+    char * outstr = "\t[vesion] %d [head length] %d [MF] %d [fragment length] %d \n"
                     "\t[packet id] %d [offset] %d [TTL] %d [protocal] %d [sum] %d\n";
     printf(outstr, frag->ip_v, frag->ip_hl, frag->ipf_mff, frag->ip_len,
                     frag->ip_id, frag->ip_off, frag->ip_ttl, frag->ip_p, frag->ip_sum);
+    printf("\t");
+    for (int i = 0; i < 50; i++)
+        printf("-");
+    printf("\n");
+
+    print_red("\t[data]:");
+    for (int i = 0; i < 3; i++) {
+        memcpy(buf, frag->data.address + i*64, 64);
+        printf("\t%s\n", buf);
+    }
+    printf("\t... ...\n\n");
 }
 
 

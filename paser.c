@@ -1,10 +1,12 @@
 #include "inc/paser.h"
 
-//int hasConfigFile;
+int hasConfigFile;
 int hasPacketOpt;
 int globalmtu;
 unsigned int packeDelay;
 size_t optlen;
+char textdir[TXTDIRMAX];
+
 
 static struct option long_options[] = {
     {"server",  optional_argument, 0,  's' },
@@ -17,24 +19,26 @@ static struct option long_options[] = {
     {0,         0,         0,  0 }
 };
 
+
 int
 paser_commandline(int argc, char *argv[])
 {
-    int c;
-    int index = 0;
-    // for client to connect server
-    int servport = 0;
+    int c, index;
+    int isserver, isclient, listenport, servport;
     char servaddr[ADDRMAXLEN], key[KEYMAX], value[VALUEMAX];
 
     globalmtu = 500;
     packeDelay = 0;
     optlen = 0;
 
+    isserver = isclient = servport = 0;
+    listenport = 6777;
+
     if (argc < 2)
         print_help();
 
     while (1) {
-        c = getopt_long(argc, argv, "d:s::c:hf:p:t",
+        c = getopt_long(argc, argv, "d:s::c:hf:p:tm:",
                         long_options, &index);
 
         if (c == -1)
@@ -42,18 +46,21 @@ paser_commandline(int argc, char *argv[])
 
         switch (c) {
         case 's':
+            isserver = true;
             print_red("[server] ");
             printf("start\n");
+
             if (optarg)
-                server(atoi(optarg));
-            else
-                server(6777);               // never return
+                servport = atoi(optarg);
+
             break;
+
         case 'h':
             print_help();
             break;
         case 'c':
             print_red("[client] ");
+            isclient = true;
             printf(" connect to %s\n", optarg);
             strncpy(servaddr, optarg, strlen(optarg));
             break;
@@ -61,15 +68,26 @@ paser_commandline(int argc, char *argv[])
             servport = atoi(optarg);
             break;
         case 'f':
-            printf("file: %s\n" , optarg);
+            printf("config file: %s\n" , optarg);
+            hasConfigFile = true;
             memset(key, 0, KEYMAX);
             memset(value, 0, VALUEMAX);
             FILE *fp = fopen(optarg, "r");
+
             while (fscanf(fp, "%s = %s", key, value) != EOF)
-                printf("key %s: value %s\n", key, value);
-            //
-            //
+            {
+                if (!strcmp("GlobalMTU", key))
+                    globalmtu = atoi(value);
+                if (!strcmp("TextPath", key))
+                    memcpy(textdir, value, strlen(value));
+                if (!strcmp("ServerPort", key))
+                    listenport = atoi(value);
+            }
+
             fclose(fp);
+            break;
+        case 'm':
+            globalmtu = atoi(optarg);
             break;
         case 'd':
             packeDelay = atoi(optarg);
@@ -84,10 +102,15 @@ paser_commandline(int argc, char *argv[])
             ;
         }
     }
-    if (servport != 0 && servaddr != NULL)
+
+    if (isclient && !isserver &&
+        servport != 0 && servaddr != NULL)
         client(servaddr, servport);         // never return
+    else if (isserver && !isclient)
+        server(listenport);                 // never return
     else
         print_help();
+
     return 0;
 }
 
@@ -100,6 +123,7 @@ paser_commandline(int argc, char *argv[])
     {"-p", "server port the client connect to"},
     {"-h", "help infomation"},
     {"-f", "set config file"},
+    {"-m", "set mtu"},
     {0, 0}
 };
 

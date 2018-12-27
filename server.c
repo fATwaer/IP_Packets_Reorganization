@@ -6,6 +6,7 @@ extern int hasPacketOpt;
 extern int globalmtu;
 extern unsigned int packeDelay;
 extern size_t optlen;
+extern char textdir[];
 
 void
 server(int port)
@@ -15,12 +16,16 @@ server(int port)
     struct sockaddr_in servaddr, cliaddr;
     socklen_t len;
     time_t ticks;
+    DIR *dirptr;
+    struct dirent *entry;
     char namebuff[SERVBUFMAXLINE] = {0};
     char buff[SERVBUFMAXLINE] = {0};
 
     if ((logfd = open("./log/server.log", O_RDWR | O_CREAT | O_APPEND, 0644)) < 0)
         err_exit("[open log file]");
 
+    if ((dirptr = opendir(textdir)) == NULL)
+        err_exit("[open dir error]");
 
     if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         err_exit("[socket]");
@@ -39,6 +44,8 @@ server(int port)
     if ((listen(listenfd, SERVBACKLOG)) < 0)
         err_exit("[listen]");
 
+    signal(SIGCHLD, SIG_IGN);
+
     for (; ;) {
         len = sizeof(cliaddr);
         connfd = accept(listenfd, (struct sockaddr *) &cliaddr, &len);
@@ -47,30 +54,39 @@ server(int port)
                     inet_ntop(AF_INET, &cliaddr.sin_addr, namebuff, sizeof(namebuff)),
                     ntohs(cliaddr.sin_port),
                     ctime(&ticks));
+        print_green("[new conncetion]\n");
+        printf("%s\n", buff);
         write(logfd, buff, sizeof(buff));
 
-        if ((pid = fork()) == 0) {
-            close(listenfd);
-            close(logfd);
+        int id;
+        srand(time(NULL));
+        seekdir(dirptr, 0);
 
-            send_file_fragment("./text/server.file", connfd, 0, *((uint32_t *)&cliaddr.sin_addr), 233);
+        while ((entry = readdir(dirptr))!= NULL) {
+            if (!(entry->d_type & DT_DIR))
+            {
+                printf("transfer %s\n", entry->d_name );
+                id = rand()%65536;
 
-            close(connfd);
-            exit(0);
-        }
+                if ((pid = fork()) == 0) {
+                    close(listenfd);
+                    close(logfd);
 
-        if ((pid = fork()) == 0) {
-            close(listenfd);
-            close(logfd);
+                    // generate a packet id
 
-            send_file_fragment("./text/painting.file", connfd, 0, *((uint32_t *)&cliaddr.sin_addr), 234);
+                    chdir(textdir);
+                    send_file_fragment(entry->d_name, connfd, 0, *((uint32_t *)&cliaddr.sin_addr), id);
 
-            close(connfd);
-            exit(0);
+                    close(connfd);
+                    exit(0);
+                }
+            }
+
         }
 
         close(connfd);
         //clean child process
+        // todo
     }
     exit(0);
 }
@@ -91,10 +107,10 @@ send_file_fragment(char *file_path, int connfd, uint32_t src, uint32_t dst, uint
     pkt = netpkt_alloc(globalmtu, optlen);
 
 
-    netpkt_fill(pkt, 0, dst, 1, id);
+    netpkt_fill(pkt, 0, dst, 4, id);
     datalen = globalmtu - pkt->np_hl * 4;
     for (i = 0; (n = read(textfd, buff, datalen)) > 0 && n == datalen; i += datalen) {
-        printf("i %d id %d\n", i, pkt->np_id);
+        printf("[id] %5d [offset] %4d [len] %3d\n", id, i, datalen);
         //pkt->np_off = i;
         netpkt_setoff(pkt, i);
         memcpy((void *)pkt->np_data + optlen, buff, datalen);
@@ -103,7 +119,10 @@ send_file_fragment(char *file_path, int connfd, uint32_t src, uint32_t dst, uint
         write(connfd, pkt, pkt->np_len);
     }
     sleep(packeDelay);
-    printf("i %d n %d \n", i, n);
+    printf("[id] %5d [offset] %4d [len] %3d ", id, i, n);
+    print_red("#[last fragment]");
+    printf("\n");
+    fflush(stdout);
     // last fragment
     free(pkt);
     pkt = netpkt_alloc(n + 20, optlen);
@@ -115,6 +134,6 @@ send_file_fragment(char *file_path, int connfd, uint32_t src, uint32_t dst, uint
     write(connfd, pkt, pkt->np_len);
 
     free(pkt);
-    lseek(textfd, 0, SEEK_SET);
+    close(textfd);
 }
 

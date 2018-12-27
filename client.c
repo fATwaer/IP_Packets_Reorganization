@@ -28,33 +28,21 @@ client(char *addr, int port)
     handle_connection_packet(sockfd);
 
     struct packet_info *p;
-//    while ((p = ipq_pop()) == NULL) {
-//        printf("NULL\n");
-//    }
 
-    p = ipq_pop();
-    if (p == NULL)
+    while (1)
     {
-        print_red("[no valid packet in queue]\n");
-        exit(-1);
+        if ((p = ipq_pop()) == NULL) {
+            print_red("[no valid packet in queue]");
+            printf("\n");
+            continue;
+        }
+
+        printf("\nALL DATA : \n\n");
+        print_green("[BEGIN]");
+        printf("%s", p->data.address);
+        print_green("[END]\n");
+
     }
-
-    printf("DATA : \n\n");
-    print_green("[BEGIN]");
-    printf("%s", p->data.address);
-    print_green("[END]\n");
-
-    p = ipq_pop();
-    if (p == NULL)
-    {
-        print_red("[no valid packet in queue]\n");
-        exit(-1);
-    }
-
-    printf("DATA : \n\n");
-    print_green("[BEGIN]");
-    printf("%s", p->data.address);
-    print_green("[END]\n");
 
     pause();
 }
@@ -89,7 +77,7 @@ handle_packet_routine(void *args)
     struct network_packet *pkt = netpkt_alloc(20, 0);
 
     while ((n = readn(fd, pkt, 20)) > 0) {
-        printf("offset %d len %d\n", pkt->np_off, pkt->np_len);
+        print_green("[new packet]\n");
         datalen = pkt->np_len - pkt->np_hl * 4;
 
         struct ipasfrag *frag = ipf_alloc(datalen);
@@ -135,8 +123,8 @@ cli_insert_fragment(struct ipasfrag *frag, uint32_t src, uint32_t dst)
     }
 
     ipf_insert(ipq, frag);
-    ipf_printall(ipq);
-
+    //ipf_printall(ipq);
+    ipf_print(frag);
 }
 
 
