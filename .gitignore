@@ -5,3 +5,4 @@ pktreorg
 *.cmake
 Makefile
 pktreorg
+CMakeCache.txt
