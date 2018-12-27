@@ -18,12 +18,13 @@ $ make
 
 [server]
 # no delay
-$ ./pktreorg -s
+$ ./pktreorg -s -f config/config
 # delay 1s
 $ ./pktreorg -d 1 -s
 
 
 [client]
+# default port 6777
 $./pktreorg -c 127.0.0.1 -p 6777
 
 
@@ -88,9 +89,7 @@ $./pktreorg -c 127.0.0.1 -p 6777
 
 [x] error usage information print
 
-[] file config support
-
-[] create thread to interact with user
+[x] file config support
 
 [x] insert packets into ip linkedlist
 
