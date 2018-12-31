@@ -51,7 +51,7 @@ paser_commandline(int argc, char *argv[])
             printf("start\n");
 
             if (optarg)
-                servport = atoi(optarg);
+                listenport = atoi(optarg);
 
             break;
 
@@ -105,7 +105,7 @@ paser_commandline(int argc, char *argv[])
 
     if (isclient && !isserver &&
         servport != 0 && servaddr != NULL)
-        client(servaddr, servport);         // never return
+        client(servaddr, servport);             // never return
     else if (isserver && !isclient)
         server(listenport);                 // never return
     else
